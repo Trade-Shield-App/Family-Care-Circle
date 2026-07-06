@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FamilyCare Circle — Full App UI Prototype</title>
+<style>
+:root{
+  --bg:#eef3f9;--ink:#0f172a;--muted:#657084;--soft:#f8fbff;--card:#ffffff;--line:#e3eaf4;
+  --blue:#2f6fed;--blue2:#6ea8ff;--navy:#0f1a2f;--green:#1f9d62;--amber:#f59e0b;--red:#dc2626;
+  --purple:#7c3aed;--shadow:0 18px 45px rgba(15,23,42,.10);--r:22px;--side:282px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#f4f7fb,#eaf1f8);color:var(--ink)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+.app{min-height:100vh;display:grid;grid-template-columns:var(--side) 1fr}
+.sidebar{position:sticky;top:0;height:100vh;background:linear-gradient(180deg,#0f1a2f,#142442);color:#dbe8ff;padding:20px 16px;display:flex;flex-direction:column;gap:18px;z-index:10}
+.brand{display:flex;gap:12px;align-items:center;padding:6px 8px 18px;border-bottom:1px solid rgba(255,255,255,.1)}
+.logo{width:44px;height:44px;border-radius:15px;background:linear-gradient(135deg,var(--blue),var(--blue2));display:grid;place-items:center;font-weight:900;color:white;box-shadow:0 14px 30px rgba(47,111,237,.25)}
+.brand strong{display:block;font-size:18px}.brand span{display:block;color:#a9bad7;font-size:12px;margin-top:2px}
+.nav{display:grid;gap:6px}.nav-title{font-size:11px;color:#8fa2c4;text-transform:uppercase;letter-spacing:.14em;padding:8px 10px 2px}
+.nav a{display:flex;align-items:center;gap:11px;padding:12px 13px;border-radius:16px;font-weight:750;color:#dbe8ff;transition:.18s}
+.nav a:hover,.nav a.active{background:rgba(255,255,255,.09)}
+.nav .icon{width:22px;text-align:center}
+.side-card{margin-top:auto;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:16px}
+.side-card p{color:#b6c7e6;font-size:13px;line-height:1.5;margin:7px 0 13px}
+.btn{border:0;border-radius:14px;padding:12px 15px;font-weight:850;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.18s}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.04)}
+.btn.primary{background:var(--blue);color:#fff;box-shadow:0 12px 24px rgba(47,111,237,.18)}
+.btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.btn.dark{background:#101a2e;color:#fff}
+.full{width:100%}
+.main{min-width:0}
+.topbar{height:76px;position:sticky;top:0;z-index:9;background:rgba(244,247,251,.78);backdrop-filter:blur(18px);border-bottom:1px solid rgba(227,234,244,.85);display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 26px}
+.search{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:11px 15px;flex:1;max-width:560px}
+.search input{border:0;outline:0;background:transparent;width:100%;color:var(--ink)}
+.top-actions{display:flex;align-items:center;gap:10px}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border-radius:999px;background:#eef5ff;color:#2457c5;border:1px solid #d8e6ff;font-size:12px;font-weight:850}
+.pill.green{background:#eaf8f0;color:#15803d;border-color:#cdeedc}.pill.amber{background:#fff6df;color:#a16207;border-color:#f8e2ad}.pill.red{background:#fee8e8;color:#b91c1c;border-color:#facaca}
+.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#c6d8ff,#f6fbff);display:grid;place-items:center;color:#1d4ed8;font-weight:900}
+.content{padding:24px}.screen{display:none;animation:fade .22s ease}.screen.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.page-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin-bottom:18px}
+h1{font-size:34px;letter-spacing:-.03em}h2{font-size:25px;letter-spacing:-.02em}h3{font-size:18px}.sub{color:var(--muted);margin-top:4px;line-height:1.45}
+.grid{display:grid;gap:16px}.two{grid-template-columns:1.1fr .9fr}.three{grid-template-columns:repeat(3,1fr)}.four{grid-template-columns:repeat(4,1fr)}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px}
+.status-card{background:linear-gradient(135deg,#ecfdf3,#ffffff);border:1px solid #cdeedc;border-radius:24px;padding:20px;display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+.status-left{display:flex;gap:14px;align-items:flex-start}.status-icon{width:58px;height:58px;border-radius:18px;background:#dff6ea;color:var(--green);display:grid;place-items:center;font-size:28px;flex:none}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:16px 0}.kpi{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 10px 26px rgba(15,23,42,.06)}
+.kpi span{color:var(--muted);font-size:13px}.kpi strong{display:block;font-size:28px;margin-top:6px}
+.feed{display:grid;gap:12px}.feed-item{display:flex;gap:13px;padding:14px;border:1px solid var(--line);border-radius:18px;background:#fbfdff}
+.feed-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-size:18px;flex:none}.blue{background:#ebf3ff;color:#235ed0}.green{background:#e7f8ee;color:#14804a}.amber{background:#fff4dc;color:#a16207}.red{background:#fde8e8;color:#b91c1c}.purple{background:#f0e9ff;color:#6d28d9}
+.feed-item p{color:var(--muted);font-size:14px;line-height:1.45;margin-top:3px}
+.quick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.quick{padding:15px;border:1px solid var(--line);background:#f8fbff;border-radius:18px;font-weight:850}.quick small{display:block;color:var(--muted);font-weight:650;margin-top:5px}
+.profile-hero{display:grid;grid-template-columns:130px 1fr auto;gap:18px;align-items:center}
+.person-avatar{width:116px;height:116px;border-radius:34px;background:linear-gradient(135deg,#dfeaff,#fff);display:grid;place-items:center;font-size:40px;font-weight:900;color:#1d4ed8;border:1px solid #dfe7f4}
+.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}.info{border:1px solid var(--line);background:#fbfdff;border-radius:16px;padding:13px}.info small{color:var(--muted);display:block;margin-bottom:4px}.info strong{font-size:15px}
+.calendar{display:grid;gap:10px}.appt{display:grid;grid-template-columns:84px 1fr auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:18px;padding:14px;background:#fff}
+.datebox{background:#eef5ff;color:#1d4ed8;border-radius:14px;padding:10px;text-align:center;font-weight:900}.datebox span{display:block;font-size:12px;color:#4b6fb8;font-weight:750}
+.form{display:grid;gap:12px}.form label{font-size:13px;font-weight:850;color:#334155}.field{display:grid;gap:6px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff;color:var(--ink);outline:none}.field textarea{min-height:100px;resize:vertical}
+.service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.service{border:1px solid var(--line);background:#fff;border-radius:18px;padding:16px;cursor:pointer}.service.active{border-color:#9fc0ff;background:#f0f6ff}.service .emoji{font-size:24px;margin-bottom:8px}.service strong{display:block}.service small{color:var(--muted);display:block;margin-top:4px;line-height:1.4}
+.family-list{display:grid;gap:12px}.member{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--line);background:#fff;border-radius:18px;padding:14px}.member-left{display:flex;align-items:center;gap:12px}
+.helper-board{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.column{background:#f8fbff;border:1px solid var(--line);border-radius:20px;padding:12px}.column h3{font-size:16px;margin:4px 4px 10px}.task{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px;margin-bottom:10px}.task p{color:var(--muted);font-size:13px;margin-top:4px;line-height:1.4}
+.login-wrap{min-height:calc(100vh - 124px);display:grid;place-items:center}.login-card{width:min(480px,100%);padding:28px;background:#fff;border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow)}
+.mobilebar{display:none}
+@media(max-width:1180px){.app{grid-template-columns:1fr}.sidebar{display:none}.mobilebar{display:flex}.two,.three,.four,.helper-board{grid-template-columns:1fr}.profile-hero{grid-template-columns:1fr}.service-grid{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:repeat(2,1fr)}.topbar{padding:0 14px}.content{padding:16px 14px 82px}.top-actions .pill{display:none}}
+@media(max-width:640px){.topbar{height:auto;padding:12px;align-items:stretch;flex-direction:column}.search{max-width:none}.page-head{align-items:flex-start;flex-direction:column}.kpis,.quick-grid,.info-grid,.service-grid{grid-template-columns:1fr}.appt{grid-template-columns:1fr}.status-card{flex-direction:column}.btn{width:100%}.mobilebar a{font-size:11px}}
+.mobilebar{position:fixed;left:0;right:0;bottom:0;background:rgba(15,26,47,.94);backdrop-filter:blur(18px);z-index:20;border-top:1px solid rgba(255,255,255,.08);justify-content:space-around;padding:8px 4px}
+.mobilebar a{color:#dbe8ff;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">◎</div><div><strong>FamilyCare Circle</strong><span>Penrith pilot app</span></div>
+    </div>
+    <nav class="nav">
+      <div class="nav-title">Family app</div>
+      <a class="active" onclick="showScreen('dashboard',this)"><span class="icon">🏠</span> Dashboard</a>
+      <a onclick="showScreen('profile',this)"><span class="icon">👵</span> Loved one</a>
+      <a onclick="showScreen('calendar',this)"><span class="icon">📅</span> Calendar</a>
+      <a onclick="showScreen('book',this)"><span class="icon">🛎️</span> Book help</a>
+      <a onclick="showScreen('notes',this)"><span class="icon">💬</span> Notes</a>
+      <a onclick="showScreen('family',this)"><span class="icon">👨‍👩‍👧</span> Family circle</a>
+      <div class="nav-title">Operations</div>
+      <a onclick="showScreen('admin',this)"><span class="icon">📋</span> Helper admin</a>
+      <a onclick="showScreen('login',this)"><span class="icon">🔐</span> Login</a>
+    </nav>
+    <div class="side-card">
+      <strong>Quick support</strong>
+      <p>Book prescriptions, shopping, transport, friendly visits, waiting-in or small practical help.</p>
+      <button class="btn primary full" onclick="showScreen('book')">Book help</button>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div class="search"><span>🔎</span><input placeholder="Search appointments, notes, tasks, helpers..." /></div>
+      <div class="top-actions"><span class="pill green">● Everything okay today</span><button class="btn secondary" onclick="showScreen('book')">Book help</button><div class="avatar">FR</div></div>
+    </header>
+    <div class="content">
+      <section id="screen-dashboard" class="screen active">
+        <div class="page-head"><div><h1>Family dashboard</h1><p class="sub">A shared view of what is happening with Margaret today.</p></div><button class="btn primary" onclick="showScreen('book')">+ Book support</button></div>
+        <div class="status-card">
+          <div class="status-left"><div class="status-icon">❤</div><div><h2>Margaret is okay today</h2><p class="sub">Morning check-in completed at 9:18am. Prescription collection booked for 2:00pm. No missed appointments or overdue tasks.</p></div></div>
+          <span class="pill green">Checked in</span>
+        </div>
+        <div class="kpis">
+          <div class="kpi"><span>Upcoming appointments</span><strong>3</strong></div>
+          <div class="kpi"><span>Open support tasks</span><strong>2</strong></div>
+          <div class="kpi"><span>Family updates</span><strong>6</strong></div>
+          <div class="kpi"><span>Next helper visit</span><strong>2pm</strong></div>
+        </div>
+        <div class="grid two">
+          <div class="card"><h2>Today’s feed</h2><p class="sub">Check-ins, errands, appointments and notes.</p><div class="feed" style="margin-top:14px">
+            <div class="feed-item"><div class="feed-icon green">✓</div><div><strong>Morning check-in completed</strong><p>Margaret answered the check-in call. Slept well and sounded cheerful.</p></div><span class="pill green">9:18am</span></div>
+            <div class="feed-item"><div class="feed-icon blue">💊</div><div><strong>Prescription pickup booked</strong><p>Helper assigned to collect repeat prescription and drop it off before 3:00pm.</p></div><span class="pill">2:00pm</span></div>
+            <div class="feed-item"><div class="feed-icon amber">📅</div><div><strong>GP appointment tomorrow</strong><p>Transport support requested. Emma added a note asking the helper to wait until check-in is complete.</p></div><span class="pill amber">Tomorrow</span></div>
+            <div class="feed-item"><div class="feed-icon red">📝</div><div><strong>Kitchen light needs changing</strong><p>David added this after yesterday’s visit. Add to next practical support visit.</p></div><span class="pill red">Open</span></div>
+          </div></div>
+          <div class="card"><h2>Quick actions</h2><p class="sub">Common support requests for families.</p><div class="quick-grid" style="margin-top:14px">
+            <div class="quick" onclick="showScreen('book')">💊 Prescription pickup<small>Collect and deliver medication.</small></div>
+            <div class="quick" onclick="showScreen('book')">🛒 Shopping run<small>Top-up essentials.</small></div>
+            <div class="quick" onclick="showScreen('book')">🚗 Lift to appointment<small>Transport and companion support.</small></div>
+            <div class="quick" onclick="showScreen('book')">🏠 Wait in for me<small>Engineer, delivery or repair visit.</small></div>
+          </div></div>
+        </div>
+      </section>
+
+      <section id="screen-profile" class="screen">
+        <div class="page-head"><div><h1>Loved one profile</h1><p class="sub">Key details, preferences and important contacts.</p></div><button class="btn secondary">Edit profile</button></div>
+        <div class="card profile-hero">
+          <div class="person-avatar">MW</div>
+          <div><h1 style="font-size:32px">Margaret Wilson</h1><p class="sub">Age 82 · Penrith · Lives independently · Prefers phone contact · Mobility: light assistance outside home</p><div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><span class="pill green">Independent at home</span><span class="pill">Family support circle</span><span class="pill amber">Transport helpful</span></div></div>
+          <button class="btn primary" onclick="showScreen('book')">Book support</button>
+        </div>
+        <div class="info-grid">
+          <div class="info"><small>Address</small><strong>Penrith, Cumbria</strong></div><div class="info"><small>Preferred contact</small><strong>Phone call before arrival</strong></div>
+          <div class="info"><small>Pharmacy</small><strong>Local Penrith pharmacy</strong></div><div class="info"><small>GP practice</small><strong>Stored in private record</strong></div>
+          <div class="info"><small>Useful notes</small><strong>Needs help with heavy shopping bags and transport to appointments.</strong></div><div class="info"><small>Emergency contact</small><strong>Fraser Russell</strong></div>
+        </div>
+        <div class="grid two" style="margin-top:16px">
+          <div class="card"><h2>Regular routines</h2><div class="feed" style="margin-top:12px"><div class="feed-item"><div class="feed-icon blue">💊</div><div><strong>Prescription</strong><p>Repeat prescription usually due every 4 weeks.</p></div></div><div class="feed-item"><div class="feed-icon green">☕</div><div><strong>Friendly check</strong><p>Family would like a short weekly welfare visit if nobody has been round.</p></div></div></div></div>
+          <div class="card"><h2>Support preferences</h2><div class="feed" style="margin-top:12px"><div class="feed-item"><div class="feed-icon amber">🔔</div><div><strong>Before visit</strong><p>Helper should phone 15 minutes before arriving.</p></div></div><div class="feed-item"><div class="feed-icon purple">📝</div><div><strong>After visit</strong><p>Add a short note to the family feed so everyone knows how it went.</p></div></div></div></div>
+        </div>
+      </section>
+
+      <section id="screen-calendar" class="screen">
+        <div class="page-head"><div><h1>Appointments & schedule</h1><p class="sub">Upcoming appointments, recurring reminders and support visits.</p></div><button class="btn primary">+ Add appointment</button></div>
+        <div class="grid two">
+          <div class="card"><h2>Upcoming</h2><div class="calendar" style="margin-top:14px">
+            <div class="appt"><div class="datebox"><span>JUL</span>07</div><div><strong>GP appointment</strong><p class="sub">10:30am · Transport requested · Helper to wait until check-in is complete.</p></div><span class="pill amber">Needs helper</span></div>
+            <div class="appt"><div class="datebox"><span>JUL</span>10</div><div><strong>Hairdresser</strong><p class="sub">2:15pm · Reminder only.</p></div><span class="pill green">Reminder set</span></div>
+            <div class="appt"><div class="datebox"><span>JUL</span>15</div><div><strong>Podiatry appointment</strong><p class="sub">11:00am · Family to confirm transport.</p></div><span class="pill">Pending</span></div>
+            <div class="appt"><div class="datebox"><span>JUL</span>28</div><div><strong>Prescription repeat due</strong><p class="sub">Check pharmacy status and book pickup if needed.</p></div><span class="pill blue">Recurring</span></div>
+          </div></div>
+          <div class="card"><h2>Add appointment</h2><form class="form" style="margin-top:14px"><div class="field"><label>Type</label><select><option>GP / medical appointment</option><option>Hairdresser</option><option>Family visit</option><option>Delivery / engineer</option></select></div><div class="field"><label>Date and time</label><input type="datetime-local"/></div><div class="field"><label>Support needed?</label><select><option>Reminder only</option><option>Transport needed</option><option>Someone to wait in</option><option>Friendly companion visit</option></select></div><div class="field"><label>Notes</label><textarea placeholder="Add anything family/helpers should know..."></textarea></div><button type="button" class="btn primary">Save appointment</button></form></div>
+        </div>
+      </section>
+
+      <section id="screen-book" class="screen">
+        <div class="page-head"><div><h1>Book practical help</h1><p class="sub">Choose the task, pick a time, add notes, and the family gets updates when it’s done.</p></div><span class="pill green">Penrith pilot area</span></div>
+        <div class="grid two">
+          <div class="card"><h2>1. Choose a support task</h2><div class="service-grid" style="margin-top:14px">
+            <div class="service active"><div class="emoji">💊</div><strong>Prescription pickup</strong><small>Collect and deliver medication.</small></div>
+            <div class="service"><div class="emoji">🛒</div><strong>Shopping run</strong><small>Essentials, groceries or pharmacy items.</small></div>
+            <div class="service"><div class="emoji">🚗</div><strong>Lift to appointment</strong><small>Transport and support.</small></div>
+            <div class="service"><div class="emoji">🏠</div><strong>Wait in</strong><small>Delivery, engineer or repair visit.</small></div>
+            <div class="service"><div class="emoji">☕</div><strong>Friendly visit</strong><small>Short welfare check and chat.</small></div>
+            <div class="service"><div class="emoji">🔧</div><strong>Small help task</strong><small>Bulb, TV, phone, bins or post.</small></div>
+          </div></div>
+          <div class="card"><h2>2. Booking details</h2><form class="form" style="margin-top:14px">
+            <div class="field"><label>Preferred date</label><input type="date"/></div><div class="field"><label>Preferred time</label><select><option>Morning</option><option>Afternoon</option><option>Evening</option><option>Specific time</option></select></div>
+            <div class="field"><label>Address / collection point</label><input placeholder="Pharmacy, home address, shop, etc."/></div><div class="field"><label>Notes for helper</label><textarea placeholder="Example: please phone Margaret 15 minutes before arrival. Add update once delivered."></textarea></div>
+            <div class="field"><label>Estimated price</label><div class="info"><strong>From £12 + distance/time where needed</strong><br><span class="sub">Final cost confirmed before helper assignment.</span></div></div><button type="button" class="btn primary">Confirm booking request</button>
+          </form></div>
+        </div>
+      </section>
+
+      <section id="screen-notes" class="screen">
+        <div class="page-head"><div><h1>Notes & updates</h1><p class="sub">A shared record of family updates, helper visits and useful observations.</p></div><button class="btn primary">+ Add note</button></div>
+        <div class="grid two">
+          <div class="card"><h2>Update feed</h2><div class="feed" style="margin-top:14px">
+            <div class="feed-item"><div class="feed-icon green">☕</div><div><strong>Friendly call completed</strong><p>Emma spoke to Margaret for 12 minutes. She sounded well and asked about Sunday lunch.</p></div><span class="pill">Emma</span></div>
+            <div class="feed-item"><div class="feed-icon blue">💊</div><div><strong>Prescription delivered</strong><p>Helper note: left on kitchen table as requested. Margaret answered the door and was fine.</p></div><span class="pill green">Done</span></div>
+            <div class="feed-item"><div class="feed-icon amber">🔧</div><div><strong>Kitchen light</strong><p>Still needs doing. Add to the next small home-support visit.</p></div><span class="pill amber">Open</span></div>
+            <div class="feed-item"><div class="feed-icon purple">🛒</div><div><strong>Shopping note</strong><p>Low on milk, bread and teabags. Margaret mentioned she has enough meals until Friday.</p></div><span class="pill">David</span></div>
+          </div></div>
+          <div class="card"><h2>Add family note</h2><form class="form" style="margin-top:14px"><div class="field"><label>Note type</label><select><option>General update</option><option>Health/wellbeing observation</option><option>Shopping / household need</option><option>Task for next visit</option></select></div><div class="field"><label>Visibility</label><select><option>Family circle</option><option>Family + assigned helper</option><option>Private to me</option></select></div><div class="field"><label>Note</label><textarea placeholder="Write a note for the family circle..."></textarea></div><button type="button" class="btn primary">Save note</button></form></div>
+        </div>
+      </section>
+
+      <section id="screen-family" class="screen">
+        <div class="page-head"><div><h1>Family circle</h1><p class="sub">Invite family members and control who can see, book or edit details.</p></div><button class="btn primary">+ Invite family</button></div>
+        <div class="grid two">
+          <div class="card"><h2>People with access</h2><div class="family-list" style="margin-top:14px">
+            <div class="member"><div class="member-left"><div class="avatar">FR</div><div><strong>Fraser Russell</strong><p class="sub">Admin · Can book support and edit profile</p></div></div><span class="pill green">Owner</span></div>
+            <div class="member"><div class="member-left"><div class="avatar">ER</div><div><strong>Emma Russell</strong><p class="sub">Can view, add notes and book support</p></div></div><span class="pill">Family</span></div>
+            <div class="member"><div class="member-left"><div class="avatar">DR</div><div><strong>David Russell</strong><p class="sub">Can view and add family notes</p></div></div><span class="pill">Family</span></div>
+            <div class="member"><div class="member-left"><div class="avatar">NH</div><div><strong>Neighbour helper</strong><p class="sub">Can receive assigned tasks only</p></div></div><span class="pill amber">Limited</span></div>
+          </div></div>
+          <div class="card"><h2>Permissions</h2><div class="feed" style="margin-top:14px"><div class="feed-item"><div class="feed-icon blue">🔐</div><div><strong>Admin</strong><p>Can manage profile, invite members, book help, view all notes and change billing.</p></div></div><div class="feed-item"><div class="feed-icon green">👨‍👩‍👧</div><div><strong>Family</strong><p>Can view dashboard, add notes, see appointments and request support.</p></div></div><div class="feed-item"><div class="feed-icon amber">🛎️</div><div><strong>Helper</strong><p>Can only see assigned task details and add completion notes.</p></div></div></div></div>
+        </div>
+      </section>
+
+      <section id="screen-admin" class="screen">
+        <div class="page-head"><div><h1>Helper/admin dashboard</h1><p class="sub">A private operations board for managing bookings and local helpers.</p></div><button class="btn primary">+ New manual task</button></div>
+        <div class="helper-board">
+          <div class="column"><h3>New requests</h3><div class="task"><strong>Prescription pickup</strong><p>Margaret Wilson · Penrith pharmacy · Today afternoon</p><span class="pill amber">Assign helper</span></div><div class="task"><strong>Shopping top-up</strong><p>Milk, bread, teabags · Deliver tomorrow morning</p><span class="pill amber">Unassigned</span></div></div>
+          <div class="column"><h3>Assigned</h3><div class="task"><strong>GP transport</strong><p>Margaret Wilson · Tomorrow 10:30am · Helper: Sarah</p><span class="pill">In progress</span></div><div class="task"><strong>Friendly visit</strong><p>Weekly 20-minute visit · Friday 2pm · Helper: Alan</p><span class="pill">Scheduled</span></div></div>
+          <div class="column"><h3>Completed</h3><div class="task"><strong>Prescription delivered</strong><p>Delivered yesterday 3:12pm. Note added to family feed.</p><span class="pill green">Done</span></div><div class="task"><strong>Waited for boiler engineer</strong><p>Engineer completed service. Family notified.</p><span class="pill green">Done</span></div></div>
+        </div>
+        <div class="grid two" style="margin-top:16px"><div class="card"><h2>Helper list</h2><div class="family-list" style="margin-top:12px"><div class="member"><div class="member-left"><div class="avatar">SH</div><div><strong>Sarah H.</strong><p class="sub">DBS checked · Transport + errands</p></div></div><span class="pill green">Available</span></div><div class="member"><div class="member-left"><div class="avatar">AM</div><div><strong>Alan M.</strong><p class="sub">Friendly visits + small home tasks</p></div></div><span class="pill">Today 2–5</span></div></div></div><div class="card"><h2>Operating note</h2><p class="sub">In the first Penrith pilot, this board can be managed manually by you. That lets you prove demand before building full Uber-style automatic matching.</p></div></div>
+      </section>
+
+      <section id="screen-login" class="screen">
+        <div class="login-wrap"><div class="login-card"><div class="brand" style="margin-bottom:20px"><div class="logo">◎</div><div><strong>FamilyCare Circle</strong><span style="color:var(--muted)">Sign in to your family dashboard</span></div></div><form class="form"><div class="field"><label>Email</label><input placeholder="you@example.com"/></div><div class="field"><label>Password</label><input type="password" placeholder="••••••••"/></div><button type="button" class="btn primary full" onclick="showScreen('dashboard')">Sign in</button><button type="button" class="btn secondary full">Create family account</button></form><p class="sub" style="margin-top:14px;text-align:center">Prototype only — no real login is connected yet.</p></div></div>
+      </section>
+    </div>
+  </main>
+</div>
+<nav class="mobilebar">
+  <a onclick="showScreen('dashboard')">🏠<span>Home</span></a><a onclick="showScreen('book')">🛎️<span>Book</span></a><a onclick="showScreen('calendar')">📅<span>Calendar</span></a><a onclick="showScreen('notes')">💬<span>Notes</span></a><a onclick="showScreen('admin')">📋<span>Admin</span></a>
+</nav>
+<script>
+function showScreen(name, nav){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const target=document.getElementById('screen-'+name);
+  if(target) target.classList.add('active');
+  document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
+  if(nav) nav.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.service').forEach(s=>s.addEventListener('click',()=>{document.querySelectorAll('.service').forEach(x=>x.classList.remove('active'));s.classList.add('active')}));
+</script>
+</body>
+</html>
